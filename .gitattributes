@@ -1,0 +1,2 @@
+# Diagram tooling is not the project's code; keep it out of GitHub language stats.
+tools/** linguist-documentation
