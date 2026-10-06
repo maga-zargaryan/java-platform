@@ -46,26 +46,26 @@
 <polyline points="1184,144 1200,144 1200,242 1216,242" fill="none" stroke="#9670F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m9670F0)"/>
 <text x="48" y="284" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#9AA7B4" text-anchor="start">Security groups: alb ← internet 80/443 · app ← alb 8080 · db ← app 3306 · efs ← app 2049 · endpoints ← VPC 443</text>
 <rect x="48" y="304" width="1404" height="150" rx="10" fill="#161B22" stroke="#30363D" stroke-width="1.3"/>
-<text x="64" y="334" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#E6EDF3" text-anchor="start">Every new instance (user data)</text>
+<text x="64" y="334" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#E6EDF3" text-anchor="start">Every new instance (no user data: logic baked into the AMI)</text>
 <rect x="64" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(79.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 6V3M12 6V3M15 6V3M9 21v-3M12 21v-3M15 21v-3M6 9H3M6 12H3M6 15H3M21 9h-3M21 12h-3M21 15h-3"/></g>
-<text x="110" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">1 Launch</text>
-<text x="110" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">latest template</text>
+<text x="110" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">1 Boot app AMI</text>
+<text x="110" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">release already inside</text>
 <rect x="288" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
-<g transform="translate(303.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16l-2 14H6z"/><ellipse cx="12" cy="6" rx="8" ry="2.5"/></g>
-<text x="334" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">2 Fetch JAR</text>
-<text x="334" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">S3 + sha256 check</text>
+<g transform="translate(303.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="6" width="17" height="12" rx="2"/><circle cx="8.5" cy="12" r="2"/><path d="M12.5 10.5h5M12.5 13.5h3.5"/></g>
+<text x="334" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">2 Read tag</text>
+<text x="334" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">Environment via IMDSv2</text>
 <rect x="512" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
-<g transform="translate(527.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7h6l2 2h9v10h-17z"/></g>
-<text x="558" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">3 Mount EFS</text>
-<text x="558" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">TLS, IAM, access point</text>
+<g transform="translate(527.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="6.2"/></g>
+<text x="558" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">3 Load settings</text>
+<text x="558" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">SSM /&lt;env&gt;/app/*</text>
 <rect x="736" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
-<g transform="translate(751.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h7M9 13h7M9 17h5"/><path d="M6.5 9h0M6.5 13h0M6.5 17h0" stroke-width="2.6"/></g>
-<text x="782" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">4 Configure</text>
-<text x="782" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">/etc/java-app/app.env</text>
+<g transform="translate(751.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7h6l2 2h9v10h-17z"/></g>
+<text x="782" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">4 Mount EFS</text>
+<text x="782" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">TLS, IAM, access point</text>
 <rect x="960" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(975.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></g>
-<text x="1006" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">5 Start</text>
+<text x="1006" y="368" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">5 Start app</text>
 <text x="1006" y="385" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#9AA7B4" text-anchor="start">systemd, CW agent</text>
 <rect x="1184" y="344" width="212" height="52" rx="8" fill="#161B22" stroke="#9670F0" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(1199.6,361.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.2l2.8 2.8L16.2 9.5"/></g>

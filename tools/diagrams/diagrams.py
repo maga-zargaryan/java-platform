@@ -44,12 +44,12 @@ def overview(theme):
     c.arrow([(750, 680), (750, 714)], "green", "VPC, subnets, key, cert → SSM", 764, 702, anchor="start")
 
     # java-ami
-    c.band(24, 716, 1452, 150, "orange", "java-ami", "Golden image · EC2 Image Builder")
+    c.band(24, 716, 1452, 150, "orange", "java-ami", "App AMI · EC2 Image Builder")
     c.panel(360, 736, 1092, 110)
-    steps = [("layers", "compute", "AL2023 arm64", "latest at build time"),
-             ("gear", "compute", "Patch + install", "Corretto 21 + agents"),
-             ("check", "compute", "Test", "validate + reboot test"),
-             ("ami", "compute", "Encrypted AMI", "ID published to SSM")]
+    steps = [("layers", "compute", "AL2023 arm64", "patched at build time"),
+             ("gear", "compute", "Install runtime", "Corretto 21 + agents"),
+             ("doc", "compute", "Bake release", "app.jar + services"),
+             ("ami", "compute", "Tested app AMI", "ID published to SSM")]
     for i, (g, cat, ti, sub) in enumerate(steps):
         x = 376 + i * 277
         c.card(x, 759, 229, g, cat, ti, sub, boxed=False)
@@ -64,14 +64,14 @@ def overview(theme):
     c.card(320, 991, 250, "alb", "network", "Load balancer", "HTTPS · WAF in prod", boxed=False)
     c.arrow([(572, 1023), (598, 1023)], "purple")
     c.panel(600, 968, 360, 104, "blue", "Java application tier", dashed=True, title_center=True)
-    c.card(612, 1000, 336, "asg", "compute", "Auto Scaling group", "EC2 · private subnets", boxed=False)
+    c.card(612, 1000, 336, "asg", "compute", "Auto Scaling group", "app AMI · private subnets", boxed=False)
     c.arrow([(960, 1023), (998, 1023)], "purple")
     c.panel(1000, 968, 452, 104, "purple", "Data tier", dashed=True, title_center=True)
     c.card(1012, 1000, 214, "db", "database", "RDS MySQL 8.4", "Multi-AZ in prod", boxed=False)
     c.card(1232, 1000, 214, "folder", "storage", "EFS", "shared files, TLS", boxed=False)
     for i, (g, cat, ti, sub) in enumerate([("watch", "mgmt", "CloudWatch", "logs, metrics, alarms"),
                                            ("vault", "security", "Secrets Manager", "DB password, rotated"),
-                                           ("bucket", "storage", "app.jar from S3", "checksum-verified"),
+                                           ("gear", "mgmt", "Settings from SSM", "no user data"),
                                            ("mail", "mgmt", "SNS", "alarm email")]):
         c.card(320 + i * 285, 1080, 270, g, cat, ti, sub, boxed=False)
     return c.render()
@@ -147,12 +147,12 @@ def network(theme):
 
 def image(theme):
     c = Canvas(theme, W, 440, "Image pipeline: EC2 Image Builder patches, installs, tests and publishes a Graviton AMI.")
-    c.band(24, 24, 1452, 392, "orange", "java-ami · golden image",
-           "EC2 Image Builder bakes, tests and publishes a patched AMI; the application JAR is not inside")
+    c.band(24, 24, 1452, 392, "orange", "java-ami · app AMI",
+           "EC2 Image Builder bakes a patched, fully immutable image with the application release inside")
     flow = [("layers", "compute", "Parent image", "AL2023 arm64 · latest"),
-            ("gear", "compute", "Build", "update-linux, install"),
+            ("gear", "compute", "Build", "patch, runtime, release"),
             ("check", "compute", "Validate + test", "fresh instance, reboot"),
-            ("ami", "compute", "Encrypted AMI", "java-base-arm64-<date>"),
+            ("ami", "compute", "Encrypted AMI", "java-app-<version>-arm64"),
             ("gear", "mgmt", "SSM parameter", "/imagebuilder/java-platform/…")]
     for i, (g, cat, ti, sub) in enumerate(flow):
         x = 48 + i * 280
@@ -160,12 +160,12 @@ def image(theme):
         if i < 4:
             c.arrow([(x + 253, 144), (x + 277, 144)], "orange")
     c.panel(48, 204, 680, 100, title="Installed in the image")
-    for i, (g, a, b) in enumerate([("doc", "Corretto 21", "headless JDK"), ("watch", "CloudWatch agent", "logs + metrics"),
-                                   ("folder", "amazon-efs-utils", "TLS mounts")]):
+    for i, (g, a, b) in enumerate([("doc", "Corretto 21 + agents", "CloudWatch, efs-utils"), ("box", "Release JAR", "checksum-verified"),
+                                   ("gear", "systemd units", "configure + app")]):
         c.small(64 + i * 220, 240, 210, g, "compute", a, b, "orange")
     c.panel(752, 204, 700, 100, title="Versions")
-    for i, (a, b) in enumerate([("recipe 1.0.0", "bump on recipe change"), ("component 1.0.0", "bump on YAML change"),
-                                ("build /1, /2, /3 …", "added per run")]):
+    for i, (a, b) in enumerate([("app_version 0.1.0", "release baked in"), ("recipe 1.0.0", "bump every release"),
+                                ("build /1, /2 …", "added per run")]):
         c.small(768 + i * 226, 240, 214, "var", "compute", a, b, "orange")
     for i, (g, cat, ti, sub) in enumerate([("play", "github", "Triggers", "merge, manual, weekly"),
                                            ("shield", "security", "Fails closed", "no AMI if a test fails"),
@@ -197,10 +197,10 @@ def workload(theme):
         c.small(1218, y, 234, g, cat, a, b, "purple")
         c.arrow([(1184, 144), (1200, 144), (1200, y + 26), (1216, y + 26)], "purple")
     c.text(48, 284, "Security groups: alb ← internet 80/443 · app ← alb 8080 · db ← app 3306 · efs ← app 2049 · endpoints ← VPC 443", 13)
-    c.panel(48, 304, 1404, 150, title="Every new instance (user data)")
-    steps = [("ec2", "1 Launch", "latest template"), ("bucket", "2 Fetch JAR", "S3 + sha256 check"),
-             ("folder", "3 Mount EFS", "TLS, IAM, access point"), ("list", "4 Configure", "/etc/java-app/app.env"),
-             ("play", "5 Start", "systemd, CW agent"), ("check", "6 In service", "/health = 200")]
+    c.panel(48, 304, 1404, 150, title="Every new instance (no user data: logic baked into the AMI)")
+    steps = [("ec2", "1 Boot app AMI", "release already inside"), ("token", "2 Read tag", "Environment via IMDSv2"),
+             ("gear", "3 Load settings", "SSM /<env>/app/*"), ("folder", "4 Mount EFS", "TLS, IAM, access point"),
+             ("play", "5 Start app", "systemd, CW agent"), ("check", "6 In service", "/health = 200")]
     for i, (g, a, b) in enumerate(steps):
         c.small(64 + i * 224, 344, 212, g, "compute", a, b, "purple")
     c.text(64, 428, "Rolling instance refresh: new instances must pass /health before old ones leave; auto-rollback if they never do.", 13)

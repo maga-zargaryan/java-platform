@@ -11,7 +11,7 @@ with its own pipeline, its own AWS role and its own Terraform state.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/overview.dark.svg">
-  <img alt="Four layers: infra-bootstrap (state, OIDC roles, guardrails, audit), platform-infra (VPCs, endpoints, KMS, certificates), java-ami (Image Builder golden AMI) and java-infra (Route 53, load balancer, Auto Scaling, RDS MySQL, EFS)." src="docs/diagrams/overview.light.svg">
+  <img alt="Four layers: infra-bootstrap (state, OIDC roles, guardrails, audit), platform-infra (VPCs, endpoints, KMS, certificates), java-ami (Image Builder app AMI) and java-infra (Route 53, load balancer, Auto Scaling, RDS MySQL, EFS)." src="docs/diagrams/overview.light.svg">
 </picture>
 
 ## Repositories
@@ -20,7 +20,7 @@ with its own pipeline, its own AWS role and its own Terraform state.
 |---|---|---|
 | 1 | [**infra-bootstrap**](https://github.com/maga-zargaryan/infra-bootstrap) | Terraform state, GitHub OIDC with one least-privilege role per repo and environment, permissions boundary, CloudTrail, account baseline, GitHub settings as code |
 | 2 | [**platform-infra**](https://github.com/maga-zargaryan/platform-infra) | Three-tier VPCs across two AZs with no NAT, VPC endpoints, flow logs, a KMS key per environment, ACM certificates, an isolated Image Builder VPC |
-| 3 | [**java-ami**](https://github.com/maga-zargaryan/java-ami) | Patched, tested Graviton golden AMI (Amazon Linux 2023, Corretto 21) built by EC2 Image Builder |
+| 3 | [**java-ami**](https://github.com/maga-zargaryan/java-ami) | Fully immutable Graviton app AMI built by EC2 Image Builder: patched Amazon Linux 2023, Corretto 21 and the application release, tested before use |
 | 4 | [**java-infra**](https://github.com/maga-zargaryan/java-infra) | The application tier: Route 53, ALB with WAF, Auto Scaling with rolling refresh, RDS MySQL, EFS, alarms |
 
 Layers hand values to each other only through **SSM Parameter Store** (VPC IDs, subnets, keys,
@@ -32,8 +32,8 @@ certificates, the AMI ID), never by reading another layer's Terraform state.
 - **Guardrails.** Pipelines can only create IAM roles under their own prefix and only with a permissions boundary attached.
 - **Private by default.** No NAT gateway and no internet route from private subnets; AWS services are reached through VPC endpoints; security groups allow exactly one path per flow.
 - **Encryption everywhere.** Customer-managed KMS keys for EBS, RDS, EFS, logs and SNS; TLS 1.3 at the load balancer, TLS required by MySQL and EFS.
-- **Immutable, tested images.** Image Builder patches, installs and tests every AMI; a failed test means no image.
-- **Safe releases.** Rolling instance refresh with health checks and automatic rollback; checksum-verified artifacts.
+- **Fully immutable instances.** Each AMI contains the patched OS, Java and one application release, and is tested before use. Instances have no user data: a configurator baked into the image reads the environment's settings from SSM at boot.
+- **Safe releases.** A release is a new AMI rolled out with health checks and automatic rollback; the JAR is checksum-verified when baked.
 - **Reviewed changes only.** Branch protection, plans on every pull request, and production applies exactly the plan that was approved.
 
 ## Delivery
@@ -49,15 +49,15 @@ certificates, the AMI ID), never by reading another layer's Terraform state.
 |---|---|
 | [CI identity](docs/diagrams/identity.light.svg) | How a workflow gets AWS access through OIDC, and the GitHub controls managed as code |
 | [Network](docs/diagrams/network.light.svg) | Subnet tiers per AZ, private access to AWS services, the isolated build VPC |
-| [Image pipeline](docs/diagrams/image-pipeline.light.svg) | Build, test and publish steps of the golden AMI |
+| [Image pipeline](docs/diagrams/image-pipeline.light.svg) | Build, test and publish steps of the app AMI |
 | [Application tier](docs/diagrams/workload.light.svg) | Request path, security-group chain, instance boot steps, observability |
 
 ## Deploy order
 
 1. `infra-bootstrap`: applied once by an administrator (it creates the roles CI uses)
 2. `platform-infra`: shared build network, then dev, then prod after approval
-3. `java-ami`: build the first image
-4. Upload an application release to the artifacts bucket
+3. Upload an application release to the artifacts bucket
+4. `java-ami`: build the app AMI with that release
 5. `java-infra`: dev, then prod after approval
 
 Teardown runs in reverse order through each repository's `destroy` workflow.
