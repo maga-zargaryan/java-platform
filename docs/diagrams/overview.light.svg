@@ -137,9 +137,9 @@
 <polyline points="1162,791 1200,791" fill="none" stroke="#F08C24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mF08C24)"/>
 <rect x="1219" y="771.0" width="40" height="40" rx="8.0" fill="#ED7100"/><g transform="translate(1227.0,779.0) scale(1.0)" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M8 9v6M12 9v6M16 9v6"/></g>
 <text x="1271" y="788.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Tested app AMI</text>
-<text x="1271" y="807.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#526075" text-anchor="start">ID published to SSM</text>
+<text x="1271" y="807.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#526075" text-anchor="start">exact ID, no latest</text>
 <polyline points="750,866 750,900" fill="none" stroke="#F08C24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#mF08C24)"/>
-<text x="764" y="888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#8A4A06" text-anchor="start">AMI ID → SSM</text>
+<text x="764" y="888" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="600" fill="#8A4A06" text-anchor="start">exact AMI ID → dev, then promoted to prod</text>
 <rect x="24" y="902" width="1452" height="250" rx="14" fill="#F5F0FE" stroke="#7C4DDB" stroke-width="1.6"/>
 <text x="48" y="940" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#3E1F8A" text-anchor="start">java-infra (application)</text>
 <text x="48" y="966" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="#3E1F8A" text-anchor="start">Runs the Java service on the platform</text>

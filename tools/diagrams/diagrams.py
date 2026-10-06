@@ -49,13 +49,13 @@ def overview(theme):
     steps = [("layers", "compute", "AL2023 arm64", "patched at build time"),
              ("gear", "compute", "Install runtime", "Corretto 21 + agents"),
              ("doc", "compute", "Bake release", "app.jar + services"),
-             ("ami", "compute", "Tested app AMI", "ID published to SSM")]
+             ("ami", "compute", "Tested app AMI", "exact ID, no latest")]
     for i, (g, cat, ti, sub) in enumerate(steps):
         x = 376 + i * 277
         c.card(x, 759, 229, g, cat, ti, sub, boxed=False)
         if i < 3:
             c.arrow([(x + 232, 791), (x + 270, 791)], "orange")
-    c.arrow([(750, 866), (750, 900)], "orange", "AMI ID → SSM", 764, 888, anchor="start")
+    c.arrow([(750, 866), (750, 900)], "orange", "exact AMI ID → dev, then promoted to prod", 764, 888, anchor="start")
 
     # java-infra
     c.band(24, 902, 1452, 250, "purple", "java-infra (application)", "Runs the Java service on the platform")
@@ -153,7 +153,7 @@ def image(theme):
             ("gear", "compute", "Build", "patch, runtime, release"),
             ("check", "compute", "Validate + test", "fresh instance, reboot"),
             ("ami", "compute", "Encrypted AMI", "java-app-<version>-arm64"),
-            ("gear", "mgmt", "SSM parameter", "/imagebuilder/java-platform/…")]
+            ("approve", "github", "Pinned by ID", "dev, then promote to prod")]
     for i, (g, cat, ti, sub) in enumerate(flow):
         x = 48 + i * 280
         c.card(x, 112, 250, g, cat, ti, sub)
@@ -169,7 +169,7 @@ def image(theme):
         c.small(768 + i * 226, 240, 214, "var", "compute", a, b, "orange")
     for i, (g, cat, ti, sub) in enumerate([("play", "github", "Triggers", "merge, manual, weekly"),
                                            ("shield", "security", "Fails closed", "no AMI if a test fails"),
-                                           ("layers", "compute", "Lifecycle", "keeps the newest 5"),
+                                           ("layers", "compute", "Lifecycle", "newest 5 + any in use"),
                                            ("lock", "security", "Hardened build", "IMDSv2, private, encrypted")]):
         c.card(48 + i * 352, 326, 326, g, cat, ti, sub)
     return c.render()

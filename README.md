@@ -24,7 +24,8 @@ with its own pipeline, its own AWS role and its own Terraform state.
 | 4 | [**java-infra**](https://github.com/maga-zargaryan/java-infra) | The application tier: Route 53, ALB with WAF, Auto Scaling with rolling refresh, RDS MySQL, EFS, alarms |
 
 Layers hand values to each other only through **SSM Parameter Store** (VPC IDs, subnets, keys,
-certificates, the AMI ID), never by reading another layer's Terraform state.
+certificates), never by reading another layer's Terraform state. The app AMI is the exception on
+purpose: each environment pins an **exact AMI ID** in code, and prod is promoted to the ID dev ran.
 
 ## Highlights
 
@@ -33,7 +34,7 @@ certificates, the AMI ID), never by reading another layer's Terraform state.
 - **Private by default.** No NAT gateway and no internet route from private subnets; AWS services are reached through VPC endpoints; security groups allow exactly one path per flow.
 - **Encryption everywhere.** Customer-managed KMS keys for EBS, RDS, EFS, logs and SNS; TLS 1.3 at the load balancer, TLS required by MySQL and EFS.
 - **Fully immutable instances.** Each AMI contains the patched OS, Java and one application release, and is tested before use. Instances have no user data: a configurator baked into the image reads the environment's settings from SSM at boot.
-- **Safe releases.** A release is a new AMI rolled out with health checks and automatic rollback; the JAR is checksum-verified when baked.
+- **Safe releases, exact versions.** A release is a new AMI ID: dev is pinned to it by PR, then prod is promoted to the same ID. Rollouts use health checks and automatic rollback; no environment ever follows a "latest" pointer.
 - **Reviewed changes only.** Branch protection, plans on every pull request, and production applies exactly the plan that was approved.
 
 ## Delivery
