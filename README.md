@@ -1,8 +1,8 @@
 # Java Platform on AWS
 
 A Java service on AWS, built entirely as code and delivered through GitHub Actions, following the
-AWS Well-Architected Framework. The platform is split into four repositories, one per layer, each
-with its own pipeline, its own AWS role and its own Terraform state.
+AWS Well-Architected Framework. The platform is split into four infrastructure repositories, one per
+layer, each with its own pipeline, AWS role and Terraform state, plus the application repository.
 
 ![Terraform](https://img.shields.io/badge/Terraform-1.15-7B42BC?logo=terraform&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-eu--west--1-232F3E?logo=amazonwebservices&logoColor=white)
@@ -22,6 +22,7 @@ with its own pipeline, its own AWS role and its own Terraform state.
 | 2 | [**platform-infra**](https://github.com/maga-zargaryan/platform-infra) | Three-tier VPCs across two AZs with no NAT, VPC endpoints, flow logs, a KMS key per environment, ACM certificates, an isolated Image Builder VPC |
 | 3 | [**java-ami**](https://github.com/maga-zargaryan/java-ami) | Fully immutable Graviton app AMI built by EC2 Image Builder: patched Amazon Linux 2023, Corretto 21 and the application release, tested before use |
 | 4 | [**java-infra**](https://github.com/maga-zargaryan/java-infra) | The application tier: Route 53, ALB with WAF, Auto Scaling with rolling refresh, RDS MySQL, EFS, alarms |
+| Source | [**java-app**](https://github.com/maga-zargaryan/java-app) | The Java 21 service: CI (build, test, dependency scan), tagged releases published to S3, automatic hand-off to java-ami |
 
 Layers hand values to each other only through **SSM Parameter Store** (VPC IDs, subnets, keys,
 certificates), never by reading another layer's Terraform state. The app AMI is the exception on
@@ -36,6 +37,10 @@ purpose: each environment pins an **exact AMI ID** in code, and prod is promoted
 - **Fully immutable instances.** Each AMI contains the patched OS, Java and one application release, and is tested before use. Instances have no user data: a configurator baked into the image reads the environment's settings from SSM at boot.
 - **Safe releases, exact versions.** A release is a new AMI ID: dev is pinned to it by PR, then prod is promoted to the same ID. Rollouts use health checks and automatic rollback; no environment ever follows a "latest" pointer.
 - **Reviewed changes only.** Branch protection, plans on every pull request, and production applies exactly the plan that was approved.
+
+## Release flow
+
+Tag a version in java-app → it is built, tested and uploaded → a pull request in java-ami bakes it into a new app AMI → a pull request in java-infra pins dev to that AMI → the **Promote** workflow opens the pull request that pins prod to the same AMI. Every step is reviewed; nothing follows a "latest" pointer.
 
 ## Delivery
 
