@@ -40,7 +40,7 @@ purpose: each environment pins an **exact AMI ID** in code, and prod is promoted
 
 ## Release flow
 
-Tag a version in java-app → it is built, tested and uploaded → a pull request in java-ami bakes it into a new app AMI → a pull request in java-infra pins dev to that AMI → the **Promote** workflow opens the pull request that pins prod to the same AMI. Every step is reviewed; nothing follows a "latest" pointer.
+Tag a version in java-app → it is built, tested and uploaded → a pull request in java-ami bakes it into a new app AMI → a pull request in java-infra pins dev to that AMI → a pull request pins prod to the same AMI. Every step is reviewed; nothing follows a "latest" pointer.
 
 ## Delivery
 
