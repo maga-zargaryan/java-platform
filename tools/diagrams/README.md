@@ -1,6 +1,6 @@
-# Diagram generator
+# Diagrams
 
-The architecture diagrams in all Java Platform repositories are generated, not drawn by hand.
+The architecture diagrams in all Java Platform repositories are defined as code, not drawn by hand.
 
 | File | Purpose |
 |---|---|
