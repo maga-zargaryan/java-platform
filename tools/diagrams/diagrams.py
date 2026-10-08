@@ -5,11 +5,11 @@ W = 1500
 
 
 def overview(theme):
-    c = Canvas(theme, W, 1176, "Java Platform: four repositories, layered from account foundation to application.")
+    c = Canvas(theme, W, 1176, "Java Platform: five repositories, layered from account foundation to application.")
     # infra-bootstrap
     c.band(24, 24, 1452, 260, "blue", "infra-bootstrap", "Account foundation · applied once by an administrator")
     cards = [("bucket", "storage", "Terraform state", "S3 + native locking"),
-             ("bucket", "storage", "Release artifacts", "versioned app.jar"),
+             ("bucket", "storage", "Release + plan buckets", "app.jar, reviewed prod plans"),
              ("git", "github", "GitHub OIDC", "no stored AWS keys"),
              ("shield", "security", "Guardrails", "permissions boundary"),
              ("trail", "mgmt", "CloudTrail", "account audit log"),
@@ -44,7 +44,9 @@ def overview(theme):
     c.arrow([(750, 680), (750, 714)], "green", "VPC, subnets, key, cert → SSM", 764, 702, anchor="start")
 
     # java-ami
-    c.band(24, 716, 1452, 150, "orange", "java-ami", "App AMI · EC2 Image Builder")
+    c.band(24, 716, 1452, 150, "orange", "java-app → java-ami", "Release, then app AMI")
+    c.card(48, 790, 290, "git", "github", "java-app release", "tag v* → tested app.jar")
+    c.arrow([(340, 822), (358, 822)], "orange")
     c.panel(360, 736, 1092, 110)
     steps = [("layers", "compute", "AL2023 arm64", "patched at build time"),
              ("gear", "compute", "Install runtime", "Corretto 21 + agents"),
@@ -139,7 +141,7 @@ def network(theme):
     c.panel(48, 640, 1404, 112, "orange", "Build VPC java-platform-build · 10.30.0.0/16 · no internet gateway, no NAT", dashed=True)
     for i, (g, cat, a, b) in enumerate([("ec2", "compute", "Image Builder instance", "t4g.medium, temporary"),
                                         ("endpoint", "network", "4 endpoints, one AZ", "imagebuilder, ssm, logs"),
-                                        ("bucket", "storage", "S3 allow-list", "Image Builder, SSM, AL2023 repos"),
+                                        ("bucket", "storage", "S3 allow-list", "AL2023 repos, artifacts, AWS"),
                                         ("key", "security", "Own KMS key", "encrypts its flow logs")]):
         c.small(64 + i * 316, 684, 300, g, cat, a, b, "orange")
     return c.render()
@@ -153,7 +155,7 @@ def image(theme):
             ("gear", "compute", "Build", "patch, runtime, release"),
             ("check", "compute", "Validate + test", "fresh instance, reboot"),
             ("ami", "compute", "Encrypted AMI", "java-app-<version>-arm64"),
-            ("approve", "github", "Pinned by ID", "dev, then promote to prod")]
+            ("approve", "github", "Pinned by ID", "PR to dev, then PR to prod")]
     for i, (g, cat, ti, sub) in enumerate(flow):
         x = 48 + i * 280
         c.card(x, 112, 250, g, cat, ti, sub)
@@ -164,8 +166,8 @@ def image(theme):
                                    ("gear", "systemd units", "configure + app")]):
         c.small(64 + i * 220, 240, 210, g, "compute", a, b, "orange")
     c.panel(752, 204, 700, 100, title="Versions")
-    for i, (a, b) in enumerate([("app_version 0.1.0", "release baked in"), ("recipe 1.0.0", "bump every release"),
-                                ("build /1, /2 …", "added per run")]):
+    for i, (a, b) in enumerate([("app_version", "+ AppGitCommit tag"), ("recipe_version", "patch bump per release"),
+                                ("GitCommit tag", "java-ami commit")]):
         c.small(768 + i * 226, 240, 214, "var", "compute", a, b, "orange")
     for i, (g, cat, ti, sub) in enumerate([("play", "github", "Triggers", "merge, manual, weekly"),
                                            ("shield", "security", "Fails closed", "no AMI if a test fails"),
@@ -230,10 +232,10 @@ def delivery(theme):
     c.band(24, 250, 1452, 196, "blue", "Merge to main → deploy.yml",
            "Applies in order; production waits for an approval and applies exactly the reviewed plan")
     dp = [("play", "github", "Apply shared", "platform-infra only"),
-          ("play", "github", "Apply dev", "development role"),
-          ("doc", "network", "Plan prod", "saved, not applied"),
+          ("play", "github", "Apply dev", "waits for healthy rollout"),
+          ("doc", "network", "Plan prod", "saved to private bucket"),
           ("approve", "github", "Approval", "required reviewer"),
-          ("check", "github", "Apply prod", "the exact saved plan")]
+          ("check", "github", "Apply prod", "exact plan + rollout check")]
     for i, (g, cat, ti, sub) in enumerate(dp):
         x = 48 + i * 277
         c.card(x, 336, 244, g, cat, ti, sub)
@@ -243,5 +245,30 @@ def delivery(theme):
     return c.render()
 
 
+def release(theme):
+    c = Canvas(theme, W, 470, "Release flow: a version tag becomes a tested AMI, pinned by exact ID in dev and then prod, each step a reviewed pull request.")
+    c.band(24, 24, 1452, 200, "purple", "From version tag to running instances",
+           "Every hand-off is a reviewed pull request; nothing follows a \"latest\" pointer")
+    flow = [("git", "github", "java-app", "tag v0.2.0 = pom version"),
+            ("bucket", "storage", "Artifacts bucket", "app.jar + sha256, immutable"),
+            ("gear", "compute", "java-ami PR", "app_version, app_commit"),
+            ("ami", "compute", "App AMI", "built, tested, SHA-tagged"),
+            ("asg", "compute", "java-infra PR", "dev ami_id → rollout")]
+    for i, (g, cat, ti, sub) in enumerate(flow):
+        x = 48 + i * 284
+        c.card(x, 112, 252, g, cat, ti, sub)
+        if i < 4:
+            c.arrow([(x + 255, 144), (x + 281, 144)], "purple")
+    c.arrow([(750, 224), (750, 248)], "purple")
+    c.band(24, 250, 1452, 196, "gray", "Promotion, rollback and traceability", "Same AMI ID in every environment")
+    for i, (g, cat, ti, sub) in enumerate([("approve", "github", "Promote", "PR copies dev ami_id to prod"),
+                                           ("check", "github", "Rollout check", "refresh + /health gate"),
+                                           ("flow", "neutral", "Rollback", "revert ami_id, merge"),
+                                           ("search", "neutral", "Trace", "AppGitCommit, GitCommit tags"),
+                                           ("layers", "compute", "Protected", "InUse-<env> never deleted")]):
+        c.card(48 + i * 284, 336, 252, g, cat, ti, sub)
+    return c.render()
+
+
 ALL = {"overview": overview, "identity": identity, "network": network,
-       "image-pipeline": image, "workload": workload, "delivery": delivery}
+       "image-pipeline": image, "workload": workload, "delivery": delivery, "release": release}

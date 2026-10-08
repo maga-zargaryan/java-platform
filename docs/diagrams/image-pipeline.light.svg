@@ -25,7 +25,7 @@
 <rect x="1168" y="112" width="250" height="64" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
 <rect x="1180" y="124.0" width="40" height="40" rx="8.0" fill="#24292F"/><g transform="translate(1188.0,132.0) scale(1.0)" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 19a6 6 0 0 1 11.5-2.5"/><path d="M14.5 17l2.2 2.2 4-4.4"/></g>
 <text x="1232" y="141.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Pinned by ID</text>
-<text x="1232" y="160.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#526075" text-anchor="start">dev, then promote to prod</text>
+<text x="1232" y="160.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" fill="#526075" text-anchor="start">PR to dev, then PR to prod</text>
 <rect x="48" y="204" width="680" height="100" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.3"/>
 <text x="64" y="234" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Installed in the image</text>
 <rect x="64" y="240" width="210" height="52" rx="8" fill="#FFFFFF" stroke="#F08C24" stroke-opacity="0.55" stroke-width="1.1"/>
@@ -44,16 +44,16 @@
 <text x="768" y="234" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#0F172A" text-anchor="start">Versions</text>
 <rect x="768" y="240" width="214" height="52" rx="8" fill="#FFFFFF" stroke="#F08C24" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(783.6,257.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-3 1-3 3v2.5c0 1.2-.8 2-2 2.5 1.2.5 2 1.3 2 2.5V17c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2.5c0 1.2.8 2 2 2.5-1.2.5-2 1.3-2 2.5V17c0 2-1 3-3 3"/></g>
-<text x="814" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">app_version 0.1.0</text>
-<text x="814" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">release baked in</text>
+<text x="814" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">app_version</text>
+<text x="814" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">+ AppGitCommit tag</text>
 <rect x="994" y="240" width="214" height="52" rx="8" fill="#FFFFFF" stroke="#F08C24" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(1009.6,257.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-3 1-3 3v2.5c0 1.2-.8 2-2 2.5 1.2.5 2 1.3 2 2.5V17c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2.5c0 1.2.8 2 2 2.5-1.2.5-2 1.3-2 2.5V17c0 2-1 3-3 3"/></g>
-<text x="1040" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">recipe 1.0.0</text>
-<text x="1040" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">bump every release</text>
+<text x="1040" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">recipe_version</text>
+<text x="1040" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">patch bump per release</text>
 <rect x="1220" y="240" width="214" height="52" rx="8" fill="#FFFFFF" stroke="#F08C24" stroke-opacity="0.55" stroke-width="1.1"/>
 <g transform="translate(1235.6,257.6) scale(0.7)" fill="none" stroke="#ED7100" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-3 1-3 3v2.5c0 1.2-.8 2-2 2.5 1.2.5 2 1.3 2 2.5V17c0 2 1 3 3 3M16 4c2 0 3 1 3 3v2.5c0 1.2.8 2 2 2.5-1.2.5-2 1.3-2 2.5V17c0 2-1 3-3 3"/></g>
-<text x="1266" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">build /1, /2 …</text>
-<text x="1266" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">added per run</text>
+<text x="1266" y="264" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="13.5" font-weight="600" fill="#0F172A" text-anchor="start">GitCommit tag</text>
+<text x="1266" y="281" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="400" fill="#526075" text-anchor="start">java-ami commit</text>
 <rect x="48" y="326" width="326" height="64" rx="10" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.2"/>
 <rect x="60" y="338.0" width="40" height="40" rx="8.0" fill="#24292F"/><g transform="translate(68.0,346.0) scale(1.0)" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M10 8.5l5.5 3.5-5.5 3.5z"/></g>
 <text x="112" y="355.0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#0F172A" text-anchor="start">Triggers</text>

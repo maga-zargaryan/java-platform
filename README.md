@@ -11,7 +11,7 @@ layer, each with its own pipeline, AWS role and Terraform state, plus the applic
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/overview.dark.svg">
-  <img alt="Four layers: infra-bootstrap (state, OIDC roles, guardrails, audit), platform-infra (VPCs, endpoints, KMS, certificates), java-ami (Image Builder app AMI) and java-infra (Route 53, load balancer, Auto Scaling, RDS MySQL, EFS)." src="docs/diagrams/overview.light.svg">
+  <img alt="Five repositories: infra-bootstrap (state, OIDC roles, guardrails, audit), platform-infra (VPCs, endpoints, KMS, certificates), java-app (release) → java-ami (Image Builder app AMI) and java-infra (Route 53, load balancer, Auto Scaling, RDS MySQL, EFS)." src="docs/diagrams/overview.light.svg">
 </picture>
 
 ## Repositories
@@ -40,13 +40,18 @@ purpose: each environment pins an **exact AMI ID** in code, and prod is promoted
 
 ## Release flow
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/release.dark.svg">
+  <img alt="Release flow: a java-app version tag publishes an immutable app.jar; a java-ami pull request bakes it into a tested, SHA-tagged AMI; a java-infra pull request pins dev to that AMI ID; another copies it to prod. Rollback reverts ami_id; AMIs in use are never deleted." src="docs/diagrams/release.light.svg">
+</picture>
+
 Tag a version in java-app → it is built, tested and uploaded → a pull request in java-ami bakes it into a new app AMI → a pull request in java-infra pins dev to that AMI → a pull request pins prod to the same AMI. Every step is reviewed; nothing follows a "latest" pointer.
 
 ## Delivery
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/delivery.dark.svg">
-  <img alt="Pull requests run static checks and read-only plans; merging applies shared and dev, then plans prod, waits for approval and applies that exact plan." src="docs/diagrams/delivery.light.svg">
+  <img alt="Pull requests run static checks and read-only plans; merging applies shared and dev, then plans prod, waits for approval and applies that exact plan; each apply waits for a healthy rollout." src="docs/diagrams/delivery.light.svg">
 </picture>
 
 ## More diagrams
