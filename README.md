@@ -22,7 +22,7 @@ layer, each with its own pipeline, AWS role and Terraform state, plus the applic
 | 2 | [**platform-infra**](https://github.com/maga-zargaryan/platform-infra) | Three-tier VPCs across two AZs with no NAT, VPC endpoints, flow logs, a KMS key per environment, ACM certificates, an isolated Image Builder VPC |
 | 3 | [**java-ami**](https://github.com/maga-zargaryan/java-ami) | Fully immutable Graviton app AMI built by EC2 Image Builder: patched Amazon Linux 2023, Corretto 21 and the application release, tested before use |
 | 4 | [**java-infra**](https://github.com/maga-zargaryan/java-infra) | The application tier: Route 53, ALB with WAF, Auto Scaling with rolling refresh, RDS MySQL, EFS, alarms |
-| Source | [**java-app**](https://github.com/maga-zargaryan/java-app) | The Java 21 service: CI (build, test, dependency scan), tagged releases published to S3, automatic hand-off to java-ami |
+| Source | [**java-app**](https://github.com/maga-zargaryan/java-app) | The Java 21 service: CI (build, test, dependency scan), immutable tagged releases published to S3 (versioned, checksummed), baked into the AMI by a java-ami pull request |
 
 Layers hand values to each other only through **SSM Parameter Store** (VPC IDs, subnets, keys,
 certificates), never by reading another layer's Terraform state. The app AMI is the exception on
